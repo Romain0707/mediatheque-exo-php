@@ -13,6 +13,7 @@
     <main>
         <section id="film">
             <div class="container">
+                <h2>Les derniers films ajoutés :</h2>
                 <div class="card__container">
                     <?php
                     $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
@@ -52,16 +53,7 @@
                     ?>
                 </div>
             </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <?php if(isset($_SESSION['username'])) { echo "<a href=\"createfilm.php\">Ajouter une fiche de film</a>"; }; ?>
-            </div>
-        </section>
-
-        
-        
+        </section>        
     </main>
 
     

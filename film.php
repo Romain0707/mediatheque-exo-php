@@ -11,13 +11,16 @@
     <?php require_once __DIR__ . '/pages/header.php'; ?>
 
     <main>
-        <div class="container">
-            <?php
-            $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
+        <section id="film">
+            <div class="container">
+                <h2>Tout les films :</h2>
+                <div class="card__container">
+                    <?php
+                    $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
 
-            $request = $bdd->query('SELECT id, titre, realisateur, genre, duree, img_path FROM film');
+                    $request = $bdd->query('SELECT id, titre, realisateur, genre, duree, img_path FROM film');
 
-            while($data = $request->fetch()){
+                    while($data = $request->fetch()){
                         $dureeEnHeure = date("G\h i\m\i\\n",mktime(0, $data['duree'], 0, 0, 0, 0));
 
                         if($data['img_path'] == "") {
@@ -47,8 +50,10 @@
                             </div>";
                         }
                     }
-            ?>
-        </div>
+                    ?>
+                </div>
+            </div>
+        </section>
     </main>
 
     

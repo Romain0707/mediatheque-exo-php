@@ -14,6 +14,7 @@ body {
     background-color: #8EA8C3;
     height: 100vh;
     font-family: "Roboto";
+    color: #161925;
 }
 
 header {
@@ -72,16 +73,23 @@ header nav ul .welcome {
     padding-top: 50px;
 }
 
+.container h2 {
+    margin-bottom:1.75rem;
+}
+
 .card__container {
+    width: 100%;
     display: grid;
+    row-gap: 30px;
     justify-items: center;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(350px,1fr));
 }
 
 .card {
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 100%;
     max-width: 350px;
     background-color: #F9F9F9;
     border-radius: 12px;
@@ -102,7 +110,7 @@ header nav ul .welcome {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding-left: 20px;
+    padding-inline: 20px;
     padding-bottom: 20px;
 }
 
@@ -113,6 +121,9 @@ header nav ul .welcome {
 
 .card__content p {
     margin-bottom: 0.625rem;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    line-clamp: 1; 
 }
 
 .card__content a {
@@ -130,4 +141,228 @@ header nav ul .welcome {
 .card__content a:hover {
     color: #161925;
     background-color: white;
+}
+
+#form__createfilm {
+    padding-top: 30px;
+}
+
+#form__createfilm .container {
+    background-color: #F9F9F9;
+    border-radius: 20px;
+}
+
+#form__createfilm .container form {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: 8px;
+}
+
+#form__createfilm .container form label,
+#login .container form label {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: larger;
+}
+
+#form__createfilm .container form textarea,
+#login .container form input:not([type="submit"]),
+#form__createfilm .container form input:not([type="submit"],[type="file"]) {
+    height: 3rem;
+    border-radius: 8px;
+    appearance: none;
+    border: none;
+    border: 1px solid #161925;
+    padding: 10px 15px;
+    font-size: large;
+}
+
+#form__createfilm .container form textarea:focus,
+#form__createfilm .container form input:not([type="submit"],[type="file"]):focus {
+outline: none;
+}
+
+#form__createfilm .container form input[type="submit"],
+#login .container form input[type="submit"] {
+    appearance: none;
+    border: 1px solid #161925;
+    background-color: #161925;
+    color: #F9F9F9;
+    justify-self: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#form__createfilm .container form input[type="submit"]:hover {
+    cursor: pointer;
+    background-color: #F9F9F9;
+    color: #161925;
+}
+
+#form__createfilm .container form input[type="file"] {
+    display: none;
+}
+
+
+#form__createfilm .container form textarea {
+    height: 6rem;
+    resize: none;
+}
+
+#form__createfilm .container form input:nth-of-type(1) {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+#form__createfilm .container form label:nth-of-type(2) {
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+#form__createfilm .container form input:nth-of-type(3) {
+    grid-column-start: 1;
+    grid-row-start: 4;
+}
+
+#form__createfilm .container form label:nth-of-type(4) {
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+
+
+#form__createfilm .container form label:nth-of-type(5) {
+    grid-column: span 2 / span 2;
+}
+
+#form__createfilm .container form textarea {
+    grid-column: span 2 / span 2;
+    grid-row-start: 6;
+}
+
+#form__createfilm .container form label:nth-of-type(6) {
+    grid-column: span 2 / span 2;
+    grid-row-start: 7;
+}
+
+#form__createfilm .container form label:nth-of-type(7) {
+    grid-column: span 2 / span 2;
+    grid-row-start: 8;
+    border: 3px dashed #161925;
+    color: #161925;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    padding: 30px 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+#form__createfilm .container form label:nth-of-type(7):hover {
+    border: 3px dashed #406E8E;
+    color: #406E8E;
+}
+
+#form__createfilm .container form input:nth-of-type(6) {
+    grid-column: span 2 / span 2;
+    grid-row-start: 9;
+}
+
+#form__createfilm .container form .error {
+    color: red;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    grid-column: span 2
+}
+
+#login {
+    padding-top: 30px;
+}
+
+#login .container form {
+    background-color: #F9F9F9;
+    border-radius: 20px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 20px;
+    row-gap: 8px;
+}
+
+#login .container form input:nth-of-type(1) {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+#login .container form label:nth-of-type(3) {
+    grid-column: span 2 / span 2;
+}
+
+#login .container form input:nth-of-type(3) {
+    grid-column: span 2 / span 2;
+}
+#login .container form input:nth-of-type(4) {
+    margin-top: 20px;
+    grid-column: span 2 / span 2;
+}
+#login .container form label:nth-of-type(4) {
+    justify-self: center;
+    grid-column: span 2 / span 2;
+}
+
+#article-film {
+    padding-top: 30px;
+}
+
+#article-film .container .article {
+    display: flex;
+    gap: 20px;
+    background-color: #F9F9F9;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+
+#article-film .container .article .article__content {
+    position: relative;
+}
+
+#article-film .container .article .article__content form {
+    display: flex;
+    gap: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#article-film .container .article .article__content form button {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+    padding: 5px;
+}
+
+#article-film .container .article .article__content form button:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+#article-film .container .article .article__content form button[name="modify"] {
+    border-radius: 50%;
+    border: 1px solid #f4a434;
+}
+
+
+#article-film .container .article .article__content form button[name="delete"] {
+    border-radius: 50%;
+    border: 1px solid #8d1111;
 }

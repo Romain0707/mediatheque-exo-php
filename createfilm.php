@@ -11,67 +11,69 @@
     <?php require_once __DIR__ . '/pages/header.php'; ?>
 
     <main>
-        <div class="container">
-            <form action="" method="POST" enctype="multipart/form-data">
-                <label for="title">Titre :</label>
-                <input type="text" id="title" name="title">
-                <label for="realise">Réalisateur :</label>
-                <input type="text" id="realise" name="realise">
-                <label for="genre">Genre :</label>
-                <input type="text" id="genre" name="genre">
-                <label for="duree">Durée :</label>
-                <input type="number" id="duree" name="duree">
-                <label for="synopsis">Synopsis :</label>
-                <textarea name="synopsis" id="synopsis"></textarea>
-                <label for="img">Ajoutez une image pour le film :</label>
-                <input type="file" name="img" id="img">
-                <input type="submit" value="Ajouter">
-            </form>
+        <section id="form__createfilm">
+            <div class="container">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <label for="title">Titre :</label>
+                    <input type="text" id="title" name="title">
+                    <label for="realise">Réalisateur :</label>
+                    <input type="text" id="realise" name="realise">
+                    <label for="genre">Genre :</label>
+                    <input type="text" id="genre" name="genre">
+                    <label for="duree">Durée :</label>
+                    <input type="number" id="duree" name="duree">
+                    <label for="synopsis">Synopsis :</label>
+                    <textarea name="synopsis" id="synopsis"></textarea>
+                    <label for="img">Ajoutez une image pour le film :</label>
+                    <label for="img" class="custom__file"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5c0-2.64-2.05-4.78-4.65-4.96M14 13v4h-4v-4H7l4.65-4.65c.2-.2.51-.2.71 0L17 13z"/></svg></label>
+                    <input type="file" name="img" id="img">
+                    <input type="submit" value="Ajouter" name="send">
+                
+                    <?php 
+                    $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
 
-            <?php 
-            $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
+                    if(!empty($_POST['title']) && !empty($_POST['realise']) && !empty($_POST['genre']) && !empty($_POST['duree']) && !empty($_POST['synopsis'])) {
+                        $title = htmlspecialchars($_POST['title']);
+                        $realise = htmlspecialchars($_POST['realise']);
+                        $genre = htmlspecialchars($_POST['genre']);
+                        $duree = htmlspecialchars($_POST['duree']);
+                        $synopsis = htmlspecialchars($_POST['synopsis']);
+                        $tmpName = $_FILES['img']['tmp_name'];
+                        $originalName = $_FILES['img']['name'];
+                        $resultUserId = $bdd->prepare('SELECT id FROM user WHERE id = :id');
+                        $resultUserId -> execute(['id' => $_SESSION['id']]);
+                        $userId = $resultUserId->fetch();
 
-            if(isset($_POST['title'], $_POST['realise'], $_POST['genre'], $_POST['duree'], $_POST['synopsis'])) {
-                $title = htmlspecialchars($_POST['title']);
-                $realise = htmlspecialchars($_POST['realise']);
-                $genre = htmlspecialchars($_POST['genre']);
-                $duree = htmlspecialchars($_POST['duree']);
-                $synopsis = htmlspecialchars($_POST['synopsis']);
-                $tmpName = $_FILES['img']['tmp_name'];
-                $originalName = $_FILES['img']['name'];
-                $imageInfo = getimagesize($tmpName);
-                $resultUserId = $bdd->prepare('SELECT id FROM user WHERE id = :id');
-                $resultUserId -> execute(['id' => $_SESSION['id']]);
-                $userId = $resultUserId->fetch();
-                var_dump($userId);
+                        if ($tmpName != "") {
 
-                if ($imageInfo !== false) {
+                            $imageInfo = getimagesize($tmpName);
+                            $extension = pathinfo($originalName, PATHINFO_EXTENSION);
 
-                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                            $newName = uniqid("img_", true) . "." . $extension;
 
-                    $newName = uniqid("img_", true) . "." . $extension;
+                            $destination = "assets/img/" . $newName;
 
-                    $destination = "assets/img/" . $newName;
+                            move_uploaded_file($tmpName, $destination);
 
-                    move_uploaded_file($tmpName, $destination);
-
-                } else {
-                    $destination = "";
-                }
-                $adding = $bdd->prepare('INSERT INTO film (titre, realisateur, genre, duree, synopsis, img_path, userid) 
-                                                VALUES (:title, :realisateur, :genre, :duree, :synopsis, :imgpath, :userid)');
-                $adding->execute(['title' => $title,
-                                        'realisateur' => $realise,
-                                        'genre' => $genre, 
-                                        'duree' => $duree,
-                                        'synopsis' => $synopsis, 
-                                        'imgpath' => $destination,
-                                        'userid' => $userId['id']]);
-            } else {
-                echo "<p>Merci de rentré des données</p>";
-            }
-            ?>
-        </div>
+                        } else {
+                            $destination = "";
+                        }
+                        $adding = $bdd->prepare('INSERT INTO film (titre, realisateur, genre, duree, synopsis, img_path, userid) 
+                                                        VALUES (:title, :realisateur, :genre, :duree, :synopsis, :imgpath, :userid)');
+                        $adding->execute(['title' => $title,
+                                                'realisateur' => $realise,
+                                                'genre' => $genre, 
+                                                'duree' => $duree,
+                                                'synopsis' => $synopsis, 
+                                                'imgpath' => $destination,
+                                                'userid' => $userId['id']]);
+                    } else if(empty($_POST['title']) && empty($_POST['realise']) && empty($_POST['genre']) && empty($_POST['duree']) && empty($_POST['synopsis']) && isset($_POST['send'])) {
+                        echo "<p class=\"error\">Entrer des données</p>";
+                    }
+                    ?>
+                </form>
+            </div>
+        </section>
     </main>
 
     
