@@ -1,5 +1,3 @@
-<?php session_start(); ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +8,7 @@
 </head>
 <body>
 
-    <header>
-        <nav>
-            <ul class="">
-                <?php if(isset($_SESSION['username'])) { echo "<li>Bonjour {$_SESSION['username']}</li>";}?>
-                <li class="<?php  if(!isset($_SESSION['username'])) { echo 'default';}?>"><a href="index.php">Accueil</a></li>
-                <?php if(isset($_SESSION['username'])) { echo "<li><a href=\"createfilm.php\">Ajouter un film</a></li>"; }; ?>
-                <li><a href="film.php">Les films</a></li>
-                <?php 
-                if(!isset($_SESSION['username'])) {
-                    echo "<li class=\"default\"><a href=\"connexion.php\">Connexion</a></li>";
-                } else {
-                    echo "<li><a href=\"deconnexion.php?address=index.php\">Déconnexion</a></li>";
-                }?>
-            </ul>
-        </nav>
-    </header>
+    <?php require_once __DIR__ . '/pages/header.php'; ?>
 
     <main>
         <section id="film">
@@ -37,7 +20,7 @@
                     $request = $bdd->query('SELECT id, titre, realisateur, genre, duree, img_path FROM film LIMIT 3');
         
                     while($data = $request->fetch()){
-                        $$data['duree']
+                        $dureeEnHeure = date("G\h i\m\i\\n",mktime(0, $data['duree'], 0, 0, 0, 0));
 
                         if($data['img_path'] == "") {
                             echo 
@@ -46,7 +29,7 @@
                                     <p>{$data['titre']}</p>
                                     <p>{$data['realisateur']}</p>
                                     <p>{$data['genre']}</p>
-                                    <p>{$data['duree']}</p>
+                                    <p>{$dureeEnHeure}</p>
                                     <a href=\"fichefilm.php?id={$data['id']}\">Voir plus</a>
                                 </div>
                             </div>";
@@ -58,9 +41,9 @@
                                 </div>
                                 <div class=\"card__content\"> 
                                     <h3>{$data['titre']}</h3>
-                                    <p>R{$data['realisateur']}</p>
-                                    <p>{$data['genre']}</p>
-                                    <p>{$data['duree']}</p>
+                                    <p><strong>Réalisateur :</strong> {$data['realisateur']}</p>
+                                    <p><strong>Genre :</strong> {$data['genre']}</p>
+                                    <p><strong>Durée :</strong> {$dureeEnHeure}</p>
                                     <a href=\"fichefilm.php?id={$data['id']}\">Voir plus</a>
                                 </div>
                             </div>";
@@ -71,7 +54,13 @@
             </div>
         </section>
 
-        <?php if(isset($_SESSION['username'])) { echo "<a href=\"createfilm.php\">Ajouter une fiche de film</a>"; }; ?>
+        <section>
+            <div class="container">
+                <?php if(isset($_SESSION['username'])) { echo "<a href=\"createfilm.php\">Ajouter une fiche de film</a>"; }; ?>
+            </div>
+        </section>
+
+        
         
     </main>
 

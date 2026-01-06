@@ -40,6 +40,7 @@ header nav ul li:first-child {
 
 header nav ul li:last-child {
     margin-left: auto;
+    margin-right: 20px;
 }
 
 header nav ul .default {
@@ -54,6 +55,12 @@ header nav ul li a {
     color: #161925;
 }
 
+header nav ul .welcome {
+    font-weight: 700;
+    font-size: larger;
+    margin-left: 20px;
+}
+
 .container {
     max-width: 1250px;
     width: 100%;
@@ -64,7 +71,6 @@ header nav ul li a {
 #film {
     padding-top: 50px;
 }
-
 
 .card__container {
     display: grid;
@@ -93,10 +99,35 @@ header nav ul li a {
 }
 
 .card__content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding-left: 20px;
+    padding-bottom: 20px;
 }
 
 .card__content h3 {
     text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.card__content p {
+    margin-bottom: 0.625rem;
+}
+
+.card__content a {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: #161925;
+    border: 1px solid #161925;
+    padding: 10px 20px;
+    border-radius: 8px;
+    align-self: center;
+    transition: all 0.3s ease;
+}
+
+.card__content a:hover {
+    color: #161925;
+    background-color: white;
 }
