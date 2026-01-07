@@ -18,37 +18,38 @@
                     <?php
                     $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
         
-                    $request = $bdd->query('SELECT id, titre, realisateur, genre, duree, img_path FROM film LIMIT 3');
+                    $request = $bdd->query(
+                        'SELECT 
+                            f.id,
+                            f.titre,
+                            f.duree,
+                            f.img_path,
+                            GROUP_CONCAT(DISTINCT r.nom SEPARATOR \', \') AS realisateurs,
+                            GROUP_CONCAT(DISTINCT g.nom SEPARATOR \', \') AS genres
+                        FROM film f
+                        LEFT JOIN film_realisateur fr ON fr.film_id = f.id
+                        LEFT JOIN realisateur r ON r.id = fr.realisateur_id
+                        LEFT JOIN film_genre fg ON fg.film_id = f.id
+                        LEFT JOIN genre g ON g.id = fg.genre_id
+                        GROUP BY f.id
+                        LIMIT 3;');
         
                     while($data = $request->fetch()){
                         $dureeEnHeure = date("G\h i\m\i\\n",mktime(0, $data['duree'], 0, 0, 0, 0));
 
-                        if($data['img_path'] == "") {
-                            echo 
-                            "<div class=\"card\">
-                                <div class=\"card__content\"> 
-                                    <p>{$data['titre']}</p>
-                                    <p>{$data['realisateur']}</p>
-                                    <p>{$data['genre']}</p>
-                                    <p>{$dureeEnHeure}</p>
-                                    <a href=\"fichefilm.php?id={$data['id']}\">Voir plus</a>
-                                </div>
-                            </div>";
-                        } else {
-                            echo 
-                            "<div class=\"card\">
-                                <div class=\"card__img\">
-                                    <img src=\"{$data['img_path']}\" alt=\"Image du film\">
-                                </div>
-                                <div class=\"card__content\"> 
-                                    <h3>{$data['titre']}</h3>
-                                    <p><strong>Réalisateur :</strong> {$data['realisateur']}</p>
-                                    <p><strong>Genre :</strong> {$data['genre']}</p>
-                                    <p><strong>Durée :</strong> {$dureeEnHeure}</p>
-                                    <a href=\"fichefilm.php?id={$data['id']}\">Voir plus</a>
-                                </div>
-                            </div>";
-                        }
+                        echo 
+                        "<div class=\"card\">
+                            <div class=\"card__img\">
+                                <img src=\"{$data['img_path']}\" alt=\"Image du film\">
+                            </div>
+                            <div class=\"card__content\"> 
+                                <h3>{$data['titre']}</h3>
+                                <p><strong>Réalisateur :</strong> {$data['realisateurs']}</p>
+                                <p><strong>Genre :</strong> {$data['genres']}</p>
+                                <p><strong>Durée :</strong> {$dureeEnHeure}</p>
+                                <a href=\"fichefilm.php?id={$data['id']}\">Voir plus</a>
+                            </div>
+                        </div>";
                     }
                     ?>
                 </div>

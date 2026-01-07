@@ -44,6 +44,20 @@
                         $resultUserId -> execute(['id' => $_SESSION['id']]);
                         $userId = $resultUserId->fetch();
 
+                        function splitValues($input) {
+                            return array_unique(
+                                array_filter(
+                                    array_map(
+                                        'trim',
+                                        preg_split('/[,–-]+/', $input)
+                                    )
+                                )
+                            );
+                        }
+
+                        $realisateurs = splitValues($realise);
+                        $genres = splitValues($genre);
+
                         if ($tmpName != "") {
 
                             $imageInfo = getimagesize($tmpName);
@@ -58,15 +72,68 @@
                         } else {
                             $destination = "";
                         }
-                        $adding = $bdd->prepare('INSERT INTO film (titre, realisateur, genre, duree, synopsis, img_path, userid) 
-                                                        VALUES (:title, :realisateur, :genre, :duree, :synopsis, :imgpath, :userid)');
-                        $adding->execute(['title' => $title,
-                                                'realisateur' => $realise,
-                                                'genre' => $genre, 
-                                                'duree' => $duree,
-                                                'synopsis' => $synopsis, 
-                                                'imgpath' => $destination,
-                                                'userid' => $userId['id']]);
+                        $adding = $bdd->prepare(
+                            'INSERT INTO film (titre, duree, synopsis, img_path, userid)
+                            VALUES (:title, :duree, :synopsis, :imgpath, :userid)'
+                        );
+
+                        $adding->execute([
+                            'title' => $title,
+                            'duree' => $duree,
+                            'synopsis' => $synopsis,
+                            'imgpath' => $destination,
+                            'userid' => $userId['id']
+                        ]);
+
+                        $filmId = $bdd->lastInsertId();
+
+                        $insertRealisateur = $bdd->prepare(
+                            'INSERT IGNORE INTO realisateur (nom) VALUES (:nom)'
+                        );
+
+                        $getRealisateurId = $bdd->prepare(
+                            'SELECT id FROM realisateur WHERE nom = :nom'
+                        );
+
+                        $linkFilmRealisateur = $bdd->prepare(
+                            'INSERT INTO film_realisateur (film_id, realisateur_id)
+                            VALUES (:film, :realisateur)'
+                        );
+
+                        foreach ($realisateurs as $nom) {
+                            $insertRealisateur->execute(['nom' => $nom]);
+                            $getRealisateurId->execute(['nom' => $nom]);
+                            $rid = $getRealisateurId->fetchColumn();
+
+                            $linkFilmRealisateur->execute([
+                                'film' => $filmId,
+                                'realisateur' => $rid
+                            ]);
+                        }
+
+                        $insertGenre = $bdd->prepare(
+                            'INSERT IGNORE INTO genre (nom) VALUES (:nom)'
+                        );
+
+                        $getGenreId = $bdd->prepare(
+                            'SELECT id FROM genre WHERE nom = :nom'
+                        );
+
+                        $linkFilmGenre = $bdd->prepare(
+                            'INSERT INTO film_genre (film_id, genre_id)
+                            VALUES (:film, :genre)'
+                        );
+
+                        foreach ($genres as $nom) {
+                            $insertGenre->execute(['nom' => $nom]);
+                            $getGenreId->execute(['nom' => $nom]);
+                            $gid = $getGenreId->fetchColumn();
+
+                            $linkFilmGenre->execute([
+                                'film' => $filmId,
+                                'genre' => $gid
+                            ]);
+                        }
                     } else if(empty($_POST['title']) && empty($_POST['realise']) && empty($_POST['genre']) && empty($_POST['duree']) && empty($_POST['synopsis']) && isset($_POST['send'])) {
                         echo "<p class=\"error\">Entrer des données</p>";
                     }
