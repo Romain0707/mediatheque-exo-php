@@ -23,7 +23,7 @@
         <div class="container">
             <h2>Les derniers films ajoutés :</h2>
             <div class="card__container">
-                <?php 
+                <?php
                     while($data = $request->fetch()) :
                         $dureeEnHeure = date("G\h i\m\i\\n",mktime(0, $data['duree'],  0, 0, 0, 0)); 
                 ?>
@@ -42,7 +42,7 @@
                 <?php endwhile; ?>
             </div>
         </div>
-    </section>        
+    </section>
 </main>
 
 <?php require_once __DIR__ . '/pages/footer.php'; ?>

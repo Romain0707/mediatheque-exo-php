@@ -247,7 +247,7 @@ outline: none;
     grid-row-start: 7;
 }
 
-#form__createfilm .container form label:nth-of-type(7) {
+#form__createfilm .container form .custom__file {
     grid-column: span 2 / span 2;
     grid-row-start: 8;
     border: 3px dashed #161925;
