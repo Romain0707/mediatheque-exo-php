@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+<?php 
+    $title = 'Connexion';
+    require_once __DIR__ . '/pages/header.php'; 
+?>
 
-    <?php require_once __DIR__ . '/pages/header.php'; ?>
+<main>
+    <section id="login">
+        <div class="container">
+            <form action="" method="POST">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name">
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password">
+                <input type="submit" value="Se connecter" name="send">
+                <label for="inscription"><a href="inscription.php">S'inscrire</a></label>
 
-    <main>
-        <section id="login">
-            <div class="container">
-                <form action="" method="POST">
-                    <label for="name">Nom :</label>
-                    <input type="text" id="name" name="name">
-                    <label for="prenom">Prénom :</label>
-                    <input type="text" id="prenom" name="prenom">
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="password">
-                    <input type="submit" value="Se connecter" name="send">
-                    <label for="inscription"><a href="inscription.php">S'inscrire</a></label>
-
-                    <?php 
-                    $bdd = new PDO('mysql:host=localhost;dbname=mediatheque;charset=utf8','root','');
-
+                <?php 
                     if(!empty($_POST['name']) && !empty($_POST['prenom']) && !empty($_POST['password'])) {
                         $name = htmlspecialchars($_POST['name']);
                         $prenom = htmlspecialchars($_POST['prenom']);
@@ -46,10 +37,9 @@
                         echo "<p>Erreur de connexion</p>";
                     }
                 ?>
-                </form>
-            </div>
-        </section>
-    </main>
-    
-</body>
-</html>
+            </form>
+        </div>
+    </section>
+</main>
+
+<?php require_once __DIR__ . '/pages/footer.php'; ?>
